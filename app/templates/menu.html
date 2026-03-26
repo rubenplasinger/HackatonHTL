@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outdoor Survival Provision Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Design.css') }}">
+</head>
+<body>
+    <main class="layout layout--menu">
+        <section class="hero hero--menu">
+            <div class="hero__copy">
+                <p class="eyebrow">Outdoor Survival Provision Manager</p>
+                <h1>Willkommen im Survival-Verwaltungsmenü.</h1>
+                <p class="intro">
+                    Wähle zuerst einen Bereich aus. Von hier aus gelangst du zur
+                    Proviantverwaltung und den integrierten Berechnungen.
+                </p>
+            </div>
+
+            <div class="hero__stats">
+                <div class="stat-card">
+                    <span class="stat-label">Modul</span>
+                    <strong>Proviant</strong>
+                    <p class="card-copy">Verwalte Lagerbestand, Verbrauch und Berechnungen in einer Oberfläche.</p>
+                    <a class="button menu-button" href="/proviant">Zum Proviant-Bereich</a>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">API Direkt</span>
+                    <strong>REST-Endpunkte</strong>
+                    <p class="card-copy">Für Integrationen stehen alle JSON-Endpunkte weiterhin separat bereit.</p>
+                    <a class="button button--secondary menu-button" href="/provisions">Direkt zur API-Liste</a>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

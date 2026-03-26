@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proviantverwaltung</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Design.css') }}">
+</head>
+<body>
+    <main class="layout">
+        <section class="hero">
+            <div class="hero__copy">
+                <p class="eyebrow">Proviantverwaltung</p>
+                <h1>Führe alle Proviant- und Rechnerfunktionen direkt im Browser aus.</h1>
+                <p class="intro">
+                    Verwalte Vorräte, verbrauche Bestände, berechne Wanderbedarf
+                    und importiere vorgeschlagene Artikel, ohne die Oberfläche zu verlassen.
+                </p>
+                <div class="actions">
+                    <a class="button button--secondary" href="/">Zurück zum Menü</a>
+                </div>
+            </div>
+
+            <div class="hero__stats">
+                <div class="stat-card">
+                    <span class="stat-label">Gespeicherte Einträge</span>
+                    <strong id="provision-count">0</strong>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Letzte Aktion</span>
+                    <strong id="last-action">Noch keine</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard">
+            <section class="panel panel--wide">
+                <div class="panel__head">
+                    <h2>Proviantbestand</h2>
+                    <button id="refresh-provisions" class="button" type="button">Aktualisieren</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Menge</th>
+                                <th>Einheit</th>
+                            </tr>
+                        </thead>
+                        <tbody id="provision-table-body">
+                            <tr>
+                                <td colspan="4" class="empty-state">Noch keine Proviantdaten geladen.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel">
+                <h2>Proviant anlegen</h2>
+                <form id="create-provision-form" class="form-grid">
+                    <label>
+                        Name
+                        <input type="text" name="name" placeholder="Wasser" required>
+                    </label>
+                    <label>
+                        Menge
+                        <input type="number" name="quantity" step="0.01" min="0" placeholder="10" required>
+                    </label>
+                    <label>
+                        Einheit
+                        <input type="text" name="unit" placeholder="L" required>
+                    </label>
+                    <button class="button" type="submit">Eintrag anlegen</button>
+                </form>
+            </section>
+
+            <section class="panel">
+                <h2>Proviant bearbeiten</h2>
+                <form id="update-provision-form" class="form-grid">
+                    <label>
+                        Proviant-ID
+                        <input type="number" name="id" min="1" placeholder="1" required>
+                    </label>
+                    <label>
+                        Name
+                        <input type="text" name="name" placeholder="Optional">
+                    </label>
+                    <label>
+                        Menge
+                        <input type="number" name="quantity" step="0.01" min="0" placeholder="Optional">
+                    </label>
+                    <label>
+                        Einheit
+                        <input type="text" name="unit" placeholder="Optional">
+                    </label>
+                    <button class="button" type="submit">Eintrag speichern</button>
+                </form>
+            </section>
+
+            <section class="panel">
+                <h2>Verbrauch buchen</h2>
+                <form id="consume-provision-form" class="form-grid">
+                    <label>
+                        Proviant-ID
+                        <input type="number" name="id" min="1" placeholder="1" required>
+                    </label>
+                    <label>
+                        Verbrauchsmenge
+                        <input type="number" name="quantity" step="0.01" min="0" placeholder="2" required>
+                    </label>
+                    <button class="button" type="submit">Verbrauch speichern</button>
+                </form>
+            </section>
+
+            <section class="panel">
+                <h2>Proviant löschen</h2>
+                <form id="delete-provision-form" class="form-grid">
+                    <label>
+                        Proviant-ID
+                        <input type="number" name="id" min="1" placeholder="1" required>
+                    </label>
+                    <button class="button button--danger" type="submit">Eintrag löschen</button>
+                </form>
+            </section>
+
+            <section class="panel">
+                <h2>Wanderrechner</h2>
+                <form id="hiking-calculator-form" class="form-grid">
+                    <label>
+                        Dauer in Tagen
+                        <input type="number" name="duration_days" step="0.5" min="0.5" placeholder="3" required>
+                    </label>
+                    <label>
+                        Intensität
+                        <select name="intensity">
+                            <option value="low">niedrig</option>
+                            <option value="medium" selected>mittel</option>
+                            <option value="high">hoch</option>
+                        </select>
+                    </label>
+                    <button class="button" type="submit">Wanderbedarf berechnen</button>
+                    <button id="import-last-calculation" class="button button--secondary" type="button">Letzte Berechnung importieren</button>
+                </form>
+            </section>
+
+            <section class="panel">
+                <h2>Rationierungsrechner</h2>
+                <form id="rationing-calculator-form" class="form-grid">
+                    <label>
+                        Tage
+                        <input type="number" name="days" step="1" min="1" placeholder="5" required>
+                    </label>
+                    <button class="button" type="submit">Rationen berechnen</button>
+                </form>
+            </section>
+
+            <section class="panel panel--wide">
+                <h2>Eigene Berechnungsartikel importieren</h2>
+                <form id="custom-import-form" class="stack-form">
+                    <label>
+                        Artikel als JSON
+                        <textarea name="items" rows="8" spellcheck="false">[
+  {"name": "Wasser", "quantity": 7.5, "unit": "L"},
+  {"name": "Nahrung", "quantity": 7500, "unit": "kcal"}
+]</textarea>
+                    </label>
+                    <button class="button" type="submit">Artikel importieren</button>
+                </form>
+            </section>
+
+            <section class="panel panel--wide">
+                <div class="panel__head">
+                    <h2>API-Antwort</h2>
+                    <button id="clear-response" class="button button--secondary" type="button">Leeren</button>
+                </div>
+                <pre id="response-output" class="response-box">Führe eine Aktion aus, um die JSON-Antwort hier zu sehen.</pre>
+            </section>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
