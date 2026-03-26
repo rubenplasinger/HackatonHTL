@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourenplaner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='planner.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+    <main class="planner-shell">
+        <header class="planner-header">
+            <div>
+                <p class="planner-kicker">Tourenplaner</p>
+                <h1>Finde passende Outdoor-Ziele in deiner Umgebung.</h1>
+            </div>
+            <a class="planner-link" href="/">Zurueck zum Menue</a>
+        </header>
+
+        <section class="planner-grid">
+            <section class="planner-panel">
+                <h2>Tour suchen</h2>
+                <div class="planner-search">
+                    <input id="travel-message" type="text" placeholder="Zum Beispiel: leichte Wanderung mit See fuer 2 Tage">
+                    <button id="travel-btn" type="button">Suchen</button>
+                </div>
+                <div id="travel-loading" class="planner-loading hidden">Suche laeuft...</div>
+                <div id="travel-radius" class="planner-badge hidden"></div>
+                <div id="travel-preferences" class="planner-badge planner-badge--success hidden"></div>
+                <div id="travel-results" class="planner-results"></div>
+            </section>
+
+            <section class="planner-panel">
+                <h2>Ausgewaehlter Ort</h2>
+                <div id="selected-details" class="planner-detail-card">
+                    Noch kein Ort ausgewaehlt.
+                </div>
+                <button id="open-maps-btn" class="planner-button planner-button--secondary" type="button">In Maps oeffnen</button>
+            </section>
+
+            <section class="planner-panel">
+                <div class="panel-head">
+                    <h2>Wetter</h2>
+                    <button id="refresh-weather-btn" class="planner-button" type="button">Aktualisieren</button>
+                </div>
+                <div class="weather-card">
+                    <div class="weather-temp"><span id="temp-value">--</span><span>°C</span></div>
+                    <p id="weather-desc">Noch nicht geladen</p>
+                    <p id="weather-location">Standort unbekannt</p>
+                    <div class="weather-meta">
+                        <span>Luftfeuchtigkeit: <strong id="humidity">--</strong></span>
+                        <span>Wind: <strong id="wind">--</strong></span>
+                        <span>Gefuehlt: <strong id="feels-like">--</strong></span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="planner-panel">
+                <h2>Notfallhilfe</h2>
+                <div class="emergency-grid">
+                    <button class="emergency-btn" data-situation="lost" type="button">Verlaufen</button>
+                    <button class="emergency-btn" data-situation="injured" type="button">Verletzt</button>
+                    <button class="emergency-btn" data-situation="no_water" type="button">Kein Wasser</button>
+                    <button class="emergency-btn" data-situation="no_food" type="button">Kein Essen</button>
+                    <button class="emergency-btn" data-situation="no_reception" type="button">Kein Empfang</button>
+                    <button class="emergency-btn" data-situation="cold" type="button">Kalt</button>
+                </div>
+                <div id="survival-result" class="planner-detail-card">Waehle eine Situation aus.</div>
+            </section>
+
+            <section class="planner-panel planner-panel--wide">
+                <div class="panel-head">
+                    <h2>Karte</h2>
+                    <button id="find-pos-btn" class="planner-button" type="button">Standort</button>
+                </div>
+                <div id="map" class="planner-map"></div>
+                <div id="route-info" class="planner-route hidden">
+                    <strong id="city-name">--</strong>
+                    <span><span id="city-dist">--</span> km entfernt</span>
+                    <span>Zu Fuss ca. <span id="city-walking">--</span> min</span>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='planner.js') }}"></script>
+</body>
+</html>

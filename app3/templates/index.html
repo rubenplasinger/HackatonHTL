@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <title>Adventure</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <header class="app-header">
+            <h1>Adventure Planer</h1>
+            <p class="subtitle">Lass uns ein Abenteuer erleben</p>
+        </header>
+
+        <div class="app-content">
+            <div id="tab-travel" class="tab-pane active">
+                <div id="search-view">
+                    <div class="search-container">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="travel-message" class="search-input" placeholder="Was willst du unternehmen?">
+                        <button id="travel-btn" class="search-btn">→</button>
+                    </div>
+                    
+                    <div id="travel-loading" class="loading hidden">
+                        <span class="spinner"></span>
+                        <span>Suche...</span>
+                    </div>
+                    
+                    <div id="travel-radius" class="badge hidden"></div>
+                    <div id="travel-preferences" class="badge success hidden"></div>
+                    
+                    <div id="travel-results" class="results-scroll"></div>
+                </div>
+
+                <div id="selected-view" class="selected-view hidden">
+                    <button class="back-btn" id="back-btn">← Zurück</button>
+                    <div class="selected-header">
+                        <span>📌 Ausgewählter Ort</span>
+                    </div>
+                    <div id="selected-details"></div>
+                    <button id="open-maps-btn" class="maps-btn">🗺️ In Maps öffnen</button>
+                </div>
+            </div>
+
+            <div id="tab-map" class="tab-pane">
+                <div id="map" class="phone-map"></div>
+                <div class="map-controls">
+                    <button id="find-pos-btn" class="fab">📍</button>
+                </div>
+                <div id="route-info" class="route-overlay hidden">
+                    <div class="route-card">
+                        <h4>Nächste Stadt</h4>
+                        <p><span id="city-name">---</span> • <span id="city-dist">---</span> km</p>
+                        <p>Zu Fuß: <span id="city-walking">---</span> min</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-survival" class="tab-pane">
+                <div class="emergency-grid">
+                    <button class="emergency-btn" data-situation="lost">
+                        <span class="emoji">❌</span>
+                        <span>Verlaufen</span>
+                    </button>
+                    <button class="emergency-btn" data-situation="injured">
+                        <span class="emoji">🩸</span>
+                        <span>Verletzt</span>
+                    </button>
+                    <button class="emergency-btn" data-situation="no_water">
+                        <span class="emoji">💧</span>
+                        <span>Kein Wasser</span>
+                    </button>
+                    <button class="emergency-btn" data-situation="no_food">
+                        <span class="emoji">🍴</span>
+                        <span>Kein Essen</span>
+                    </button>
+                    <button class="emergency-btn" data-situation="no_reception">
+                        <span class="emoji">📵</span>
+                        <span>Kein Empfang</span>
+                    </button>
+                    <button class="emergency-btn" data-situation="cold">
+                        <span class="emoji">🥶</span>
+                        <span>Kalt</span>
+                    </button>
+                </div>
+                <div id="survival-result" class="survival-result hidden"></div>
+            </div>
+
+            <div id="tab-weather" class="tab-pane">
+                <div id="weather-current" class="weather-card">
+                    <div class="weather-header">
+                        <span id="weather-icon" class="weather-icon">🌤️</span>
+                        <div class="weather-temp">
+                            <span id="temp-value">--</span>
+                            <span id="temp-unit">°C</span>
+                        </div>
+                    </div>
+                    <div class="weather-desc" id="weather-desc">Lade Wetter...</div>
+                    <div class="weather-location" id="weather-location">📍 Standort ermitteln...</div>
+                    <button id="refresh-weather-btn" class="weather-refresh-btn">🔄 Aktualisieren</button>
+                </div>
+                <div class="weather-details">
+                    <div class="weather-detail">
+                        <span class="detail-icon">💧</span>
+                        <span class="detail-label">Luftfeuchtigkeit</span>
+                        <span class="detail-value" id="humidity">--</span>
+                    </div>
+                    <div class="weather-detail">
+                        <span class="detail-icon">💨</span>
+                        <span class="detail-label">Wind</span>
+                        <span class="detail-value" id="wind">--</span>
+                    </div>
+                    <div class="weather-detail">
+                        <span class="detail-icon">🌡️</span>
+                        <span class="detail-label">Gefühlt</span>
+                        <span class="detail-value" id="feels-like">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-chat" class="tab-pane">
+                <div class="chat-full">
+                    <div class="chat-history" id="chat-messages-new"></div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chat-input-new" placeholder="Frage stellen...">
+                        <button id="chat-send-btn-new" class="chat-send-btn">→</button>
+                    </div>
+                </div>
+            </div>
+
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-tab="travel">
+                <span class="nav-icon">🧭</span>
+                <span class="nav-label">Planen</span>
+            </button>
+            <button class="nav-btn" data-tab="weather">
+                <span class="nav-icon">🌤️</span>
+                <span class="nav-label">Wetter</span>
+            </button>
+            <button class="nav-btn" data-tab="map">
+                <span class="nav-icon">🗺️</span>
+                <span class="nav-label">Karte</span>
+            </button>
+            <button class="nav-btn" data-tab="survival">
+                <span class="nav-icon">🆘</span>
+                <span class="nav-label">Notfall</span>
+            </button>
+        </nav>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let userLat = 47.5031, userLon = 9.7471;
+        let map, routeLayer, userMarker;
+        let selectedDest = null;
+
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                const tab = document.getElementById('tab-' + btn.dataset.tab);
+                tab.classList.add('active');
+                if (btn.dataset.tab === 'map') {
+                    if (!map) initMap();
+                    setTimeout(() => map?.invalidateSize(), 100);
+                }
+                if (btn.dataset.tab === 'weather') fetchWeather();
+            });
+        });
+
+        document.getElementById('back-btn').addEventListener('click', () => {
+            document.getElementById('selected-view').classList.add('hidden');
+            document.getElementById('search-view').classList.remove('hidden');
+        });
+
+        const travelBtn = document.getElementById('travel-btn');
+        const travelMessage = document.getElementById('travel-message');
+
+        travelBtn.addEventListener('click', async () => {
+            const msg = travelMessage.value.trim();
+            if (!msg) return;
+            
+            document.getElementById('travel-results').innerHTML = '';
+            document.getElementById('travel-loading').classList.remove('hidden');
+
+            try {
+                const data = await (await fetch('/chat', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ message: msg, lat: userLat, lon: userLon })
+                })).json();
+
+                document.getElementById('travel-loading').classList.add('hidden');
+                
+                if (data.radius_used) {
+                    const badge = document.getElementById('travel-radius');
+                    badge.innerText = `${data.radius_used}km Umkreis • ${data.locations_found} Orte`;
+                    badge.classList.remove('hidden');
+                }
+                if (data.preferences_interpreted) {
+                    const badge = document.getElementById('travel-preferences');
+                    badge.innerText = `✓ ${data.preferences_interpreted}`;
+                    badge.classList.remove('hidden');
+                }
+
+                if (data.results?.length) {
+                    data.results.forEach((r, i) => {
+                        const el = document.createElement('div');
+                        el.className = 'location-card';
+                        el.innerHTML = `
+                            <div class="loc-top">
+                                <span class="rank">#${i+1}</span>
+                                <span class="score">${r.match_score}★</span>
+                            </div>
+                            <h3>${r.name}</h3>
+                            <p class="desc">${r.reason}</p>
+                            <div class="loc-info">
+                                <span>⏱️ ${r.hiking_info?.duration_hours || 0}h Wanderung</span>
+                                <span>📍 ${r.distance_km}km entfernt</span>
+                            </div>
+                            <button class="select-btn" data-lat="${r.latitude}" data-lon="${r.longitude}" data-name="${r.name}">Auswählen</button>
+                        `;
+                        document.getElementById('travel-results').appendChild(el);
+                    });
+                    
+                    document.querySelectorAll('.select-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => selectLocation(e.target.dataset));
+                    });
+                }
+            } catch (err) {
+                alert('Fehler: ' + err.message);
+            }
+        });
+
+        function selectLocation(data) {
+            selectedDest = { lat: parseFloat(data.lat), lon: parseFloat(data.lon), name: data.name };
+            document.getElementById('search-view').classList.add('hidden');
+            document.getElementById('selected-view').classList.remove('hidden');
+            document.getElementById('selected-details').innerHTML = `
+                <h2>${data.name}</h2>
+                <p class="selected-desc">Tippe auf "In Maps öffnen" um die Navigation zu starten.</p>
+            `;
+        }
+
+        document.getElementById('open-maps-btn').addEventListener('click', () => {
+            if (selectedDest) {
+                window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedDest.lat},${selectedDest.lon}`, '_blank');
+            }
+        });
+
+        function initMap() {
+            map = L.map('map', { zoomControl: false }).setView([userLat, userLon], 12);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '' }).addTo(map);
+            
+            userMarker = L.marker([userLat, userLon], {
+                icon: L.divIcon({ className: 'marker-user', html: '📍', iconSize: [40,40] })
+            }).addTo(map).bindPopup('Dein Standort');
+        }
+
+        document.getElementById('find-pos-btn').addEventListener('click', () => {
+            navigator.geolocation?.getCurrentPosition(pos => {
+                userLat = pos.coords.latitude;
+                userLon = pos.coords.longitude;
+                map.setView([userLat, userLon], 14);
+                userMarker.setLatLng([userLat, userLon]);
+                findNearestCity();
+                fetchWeather();
+            }, (err) => {
+                alert('Standort konnte nicht ermittelt werden');
+            });
+        });
+
+        async function findNearestCity() {
+            const data = await (await fetch('/nearest', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ lat: userLat, lon: userLon })
+            })).json();
+            
+            document.getElementById('city-name').innerText = data.city;
+            document.getElementById('city-dist').innerText = data.distance;
+            document.getElementById('city-walking').innerText = data.walking_time;
+            document.getElementById('route-info').classList.remove('hidden');
+            
+            L.marker([data.city_lat, data.city_lon], {
+                icon: L.divIcon({ className: 'marker-city', html: '🏙️', iconSize: [35,35] })
+            }).addTo(map).bindPopup(data.city);
+            
+            showRoute(data.city_lat, data.city_lon);
+        }
+
+        async function showRoute(endLat, endLon) {
+            if (routeLayer) map.removeLayer(routeLayer);
+            try {
+                const data = await (await fetch('/route', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ lat: userLat, lon: userLon, end_lat: endLat, end_lon: endLon })
+                })).json();
+                
+                if (data.route) {
+                    routeLayer = L.polyline(data.route, { color: '#2997ff', weight: 5 }).addTo(map);
+                    map.fitBounds(routeLayer.getBounds(), { padding: [20,20] });
+                    
+                    L.marker([endLat, endLon], {
+                        icon: L.divIcon({ className: 'marker-dest', html: '📌', iconSize: [35,35] })
+                    }).addTo(map).bindPopup('Ziel').openPopup();
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        document.querySelectorAll('.emergency-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const situation = btn.dataset.situation;
+                const resultDiv = document.getElementById('survival-result');
+                resultDiv.classList.remove('hidden');
+                
+                const data = await (await fetch('/decision', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ situation })
+                })).json();
+                
+                resultDiv.innerHTML = `
+                    <div class="location-card">
+                        <h3>${btn.querySelector('span:last-child').textContent}</h3>
+                        <p class="desc">${data.steps.map((s,i) => `${i+1}. ${s}`).join('<br>')}</p>
+                    </div>
+                `;
+            });
+        });
+
+        // === SIMPLE CHATBOT ===
+        let chatStep = 0;
+
+        function handleChatbot(userMessage) {
+            chatStep++;
+            
+            if (chatStep === 1) {
+                return "Womit kann ich helfen?";
+            } else if (chatStep === 2 && userMessage.toLowerCase().includes("wanderung")) {
+                return "Vorarlberg ist wunderbar dafür!";
+            } else {
+                return "Danke für Ihre Nachricht!";
+            }
+        }
+
+        function initChatbot() {
+            if (chatMessages && chatMessages.children.length === 0) {
+                addChatMessage("Womit kann ich helfen?", false);
+            }
+        }
+
+        const chatInput = document.getElementById('chat-input-new');
+        const chatSendBtn = document.getElementById('chat-send-btn-new');
+        const chatMessages = document.getElementById('chat-messages-new');
+
+        initChatbot();
+
+        function addChatMessage(text, isUser) {
+            const div = document.createElement('div');
+            div.className = isUser ? 'msg user' : 'msg assistant';
+            div.textContent = text;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendChatMessage() {
+            const msg = chatInput.value.trim();
+            if (!msg) return;
+            
+            addChatMessage(msg, true);
+            chatInput.value = '';
+            addChatMessage('Denke nach...', false);
+            
+            // Use simple chatbot instead of API
+            setTimeout(() => {
+                chatMessages.lastChild.remove();
+                addChatMessage(handleChatbot(msg), false);
+            }, 500);
+        }
+
+        chatSendBtn.addEventListener('click', sendChatMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+
+        // === WEATHER ===
+        function getWeatherIcon(code) {
+            if (code.includes('cloud') && code.includes('rain')) return '🌧️';
+            if (code.includes('cloud') && code.includes('snow')) return '🌨️';
+            if (code.includes('cloud') && code.includes('thunder')) return '⛈️';
+            if (code.includes('cloud')) return '☁️';
+            if (code.includes('rain')) return '🌧️';
+            if (code.includes('snow')) return '🌨️';
+            if (code.includes('clear')) return '☀️';
+            if (code.includes('mist') || code.includes('fog')) return '🌫️';
+            return '🌤️';
+        }
+
+        function updateWeather(data) {
+            document.getElementById('temp-value').textContent = Math.round(data.temperature);
+            document.getElementById('weather-desc').textContent = data.description;
+            document.getElementById('weather-icon').textContent = getWeatherIcon(data.condition);
+            document.getElementById('humidity').textContent = data.humidity + '%';
+            document.getElementById('wind').textContent = data.wind_speed + ' km/h';
+            document.getElementById('feels-like').textContent = Math.round(data.feels_like) + '°C';
+            document.getElementById('weather-location').textContent = '📍 ' + data.location;
+        }
+
+        async function fetchWeather() {
+            document.getElementById('weather-desc').textContent = 'Lade Wetter...';
+            try {
+                const data = await (await fetch('/weather', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ lat: userLat, lon: userLon })
+                })).json();
+                
+                if (data.error) {
+                    document.getElementById('weather-desc').textContent = data.error;
+                } else {
+                    updateWeather(data);
+                }
+            } catch (err) {
+                document.getElementById('weather-desc').textContent = 'Fehler beim Laden';
+            }
+        }
+
+        document.getElementById('refresh-weather-btn').addEventListener('click', fetchWeather);
+
+        initMap();
+    </script>
+</body>
+</html>

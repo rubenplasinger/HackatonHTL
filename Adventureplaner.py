@@ -6,6 +6,7 @@ from models import db
 from routes.character import character_bp
 from routes.calculator import calculator_bp
 from routes.learning import learning_bp
+from routes.planner import planner_bp
 from routes.provisions import provisions_bp
 from routes.quiz import quiz_bp
 
@@ -25,6 +26,7 @@ def create_app() -> Flask:
     app.register_blueprint(learning_bp)
     app.register_blueprint(quiz_bp)
     app.register_blueprint(character_bp)
+    app.register_blueprint(planner_bp)
 
     @app.get("/")
     def index():
