@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ### This Project was developed as a part of the HTL Dornbirn Hackathon
 
 ### Git Commands
@@ -14,3 +15,6 @@ git commit -m "Your message"
 ```bash
 git pull
 ```
+=======
+This project was developed as part of the HTL Dornbirn hackathon
+>>>>>>> b4e7f34ae100ea8c86c69c2ecad3724d72a9dd61
