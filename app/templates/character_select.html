@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charakterauswahl</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Design.css') }}">
+</head>
+<body>
+    <main class="layout">
+        <section class="hero hero--compact">
+            <div class="hero__copy">
+                <p class="eyebrow">Charakter</p>
+                <h1>Waehle eine Basis fuer deinen Wandercharakter.</h1>
+                <p class="intro">Danach kannst du Kopf, Kleidung und Schuhe direkt anpassen.</p>
+                <div class="actions">
+                    <a class="button button--secondary" href="/">Zum Menue</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard">
+            <form method="POST" action="/charakter" class="panel selection-card">
+                <input type="hidden" name="geschlecht" value="m">
+                <h2>Typ A</h2>
+                <p>Starte mit der ersten Charaktervariante.</p>
+                <button class="button" type="submit">Auswaehlen</button>
+            </form>
+            <form method="POST" action="/charakter" class="panel selection-card">
+                <input type="hidden" name="geschlecht" value="w">
+                <h2>Typ B</h2>
+                <p>Starte mit der zweiten Charaktervariante.</p>
+                <button class="button" type="submit">Auswaehlen</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

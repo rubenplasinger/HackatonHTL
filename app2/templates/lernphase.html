@@ -1,0 +1,60 @@
+{% extends "template.html" %}
+{% block title %}Lernphase - {{ lesson.title }}{% endblock %}
+{% block content %}
+<div class="lern-container">
+
+    <div class="lern-header">
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: {{ (l_id / total * 100) | int }}%"></div>
+        </div>
+        <span class="progress-text">LEKTION {{ l_id }} / {{ total }}</span>
+    </div>
+
+    <div class="trainer-scene">
+        <div class="speech-bubble">
+            <div class="bubble-title">{{ lesson.icon }} {{ lesson.title | upper }}</div>
+        </div>
+        <div class="trainer-wrap">
+            <img src="{{ url_for('static', filename='trainer.svg') }}"
+                 alt="Trainer"
+                 class="trainer-img"
+                 onerror="this.style.display='none'; document.getElementById('trainer-placeholder').style.display='flex'">
+            <div id="trainer-placeholder" class="trainer-placeholder">
+                <span>T</span>
+                <span class="placeholder-hint">trainer.svg fehlt</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="lesson-card">
+        <ul class="lesson-list">
+            {% for punkt in lesson.content %}
+            <li class="lesson-item">
+                <span class="lesson-bullet">></span>
+                <span>{{ punkt }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div class="tip-box">
+            <div class="tip-label">TIPP</div>
+            <p>{{ lesson.tip }}</p>
+        </div>
+    </div>
+
+    <div class="lern-nav">
+        {% if l_id > 1 %}
+        <a href="/lernen/{{ l_id - 1 }}" class="btn btn-secondary">< ZURUECK</a>
+        {% else %}
+        <a href="/" class="btn btn-secondary">HOME</a>
+        {% endif %}
+
+        {% if l_id < total %}
+        <a href="/lernen/{{ l_id + 1 }}" class="btn btn-primary">WEITER ></a>
+        {% else %}
+        <a href="/quiz/start" class="btn btn-primary">QUIZ ></a>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

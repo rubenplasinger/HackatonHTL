@@ -1,0 +1,46 @@
+{% extends "template.html" %}
+{% block title %}Charakter Editor{% endblock %}
+{% block content %}
+<div class="char-container">
+    <h1 class="char-title">CHARAKTER<br>EDITOR</h1>
+    <p class="char-subtitle">{{ 'MANNLICH' if geschlecht == 'm' else 'WEIBLICH' }}</p>
+
+    <div class="char-preview">
+        <div class="char-layers">
+            <div class="char-ground"></div>
+            {% for layer in image_layers %}
+            <img src="{{ url_for('static', filename=layer.filename) }}"
+                 alt="{{ layer.teil }}"
+                 class="char-layer char-layer-{{ layer.teil }}"
+                 onerror="this.src=''; this.style.display='none'">
+            {% endfor %}
+        </div>
+        <div class="char-preview-label">VORSCHAU</div>
+    </div>
+
+    {% set labels = {'kopf': 'KOPF', 'koerper': 'KOERPER', 'hose': 'HOSE', 'schuhe': 'SCHUHE'} %}
+    {% for teil in part_order %}
+    <div class="part-row">
+        <span class="part-label">{{ labels[teil] }}</span>
+        <div class="part-controls">
+            <form method="POST" style="display:inline">
+                <input type="hidden" name="teil" value="{{ teil }}">
+                <input type="hidden" name="richtung" value="zurueck">
+                <button type="submit" class="arrow-btn">&lt;</button>
+            </form>
+            <span class="part-index">{{ parts[teil] }} / {{ maxima[teil] }}</span>
+            <form method="POST" style="display:inline">
+                <input type="hidden" name="teil" value="{{ teil }}">
+                <input type="hidden" name="richtung" value="vor">
+                <button type="submit" class="arrow-btn">&gt;</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="char-actions">
+        <a href="/charakter" class="btn btn-secondary">&lt; GESCHLECHT</a>
+        <a href="/" class="btn btn-primary">SPEICHERN</a>
+    </div>
+</div>
+{% endblock %}

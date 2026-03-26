@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lernphase</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Design.css') }}">
+</head>
+<body>
+    <main class="layout">
+        <section class="hero hero--compact">
+            <div class="hero__copy">
+                <p class="eyebrow">Lernphase</p>
+                <h1>{{ lesson.title }}</h1>
+                <p class="intro">Lektion {{ lesson_id }} von {{ total }} fuer sicheres Outdoor-Wissen.</p>
+                <div class="actions">
+                    <a class="button button--secondary" href="/">Zum Menue</a>
+                </div>
+            </div>
+            <div class="hero__stats">
+                <div class="stat-card">
+                    <span class="stat-label">Fortschritt</span>
+                    <strong>{{ ((lesson_id / total) * 100) | int }}%</strong>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Fokus</span>
+                    <strong>{{ lesson.icon }}</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel panel--wide learning-panel">
+            <div class="progress-track">
+                <div class="progress-fill-bar" style="width: {{ ((lesson_id / total) * 100) | int }}%"></div>
+            </div>
+            <ul class="lesson-list-modern">
+                {% for item in lesson.content %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+            <div class="tip-card">
+                <h2>Tipp</h2>
+                <p>{{ lesson.tip }}</p>
+            </div>
+            <div class="actions">
+                {% if lesson_id > 1 %}
+                <a class="button button--secondary" href="/lernen/{{ lesson_id - 1 }}">Vorherige Lektion</a>
+                {% else %}
+                <a class="button button--secondary" href="/">Zum Menue</a>
+                {% endif %}
+                {% if lesson_id < total %}
+                <a class="button" href="/lernen/{{ lesson_id + 1 }}">Naechste Lektion</a>
+                {% else %}
+                <a class="button" href="/quiz/start">Zum Quiz</a>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+</body>
+</html>

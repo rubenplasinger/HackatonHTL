@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charakter Editor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Design.css') }}">
+</head>
+<body>
+    <main class="layout">
+        <section class="hero hero--compact">
+            <div class="hero__copy">
+                <p class="eyebrow">Charakter Editor</p>
+                <h1>Stelle deinen Wandercharakter zusammen.</h1>
+                <p class="intro">Wechsle einzelne Teile und kombiniere dein Setup im bestehenden Projektstil.</p>
+                <div class="actions">
+                    <a class="button button--secondary" href="/charakter">Basis wechseln</a>
+                    <a class="button button--secondary" href="/">Zum Menue</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard">
+            <section class="panel">
+                <h2>Vorschau</h2>
+                <div class="character-stage">
+                    <div class="char-layers">
+                        {% for layer in image_layers %}
+                        <img src="{{ url_for('static', filename=layer.filename) }}"
+                             alt="{{ layer.teil }}"
+                             class="char-layer char-layer-{{ layer.teil }}"
+                             onerror="this.style.display='none'">
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel">
+                <h2>Anpassung</h2>
+                {% set labels = {'kopf': 'Kopf', 'koerper': 'Oberteil', 'hose': 'Hose', 'schuhe': 'Schuhe'} %}
+                {% for teil in part_order %}
+                <div class="part-row-modern">
+                    <span>{{ labels[teil] }}</span>
+                    <div class="part-controls-modern">
+                        <form method="POST">
+                            <input type="hidden" name="teil" value="{{ teil }}">
+                            <input type="hidden" name="richtung" value="zurueck">
+                            <button class="button button--secondary" type="submit">Zurueck</button>
+                        </form>
+                        <strong>{{ parts[teil] }}</strong>
+                        <form method="POST">
+                            <input type="hidden" name="teil" value="{{ teil }}">
+                            <input type="hidden" name="richtung" value="vor">
+                            <button class="button" type="submit">Weiter</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </section>
+        </section>
+    </main>
+</body>
+</html>

@@ -3,34 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Outdoor Survival Provision Manager</title>
+    <title>Adventureplaner</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='Design.css') }}">
 </head>
 <body>
     <main class="layout layout--menu">
         <section class="hero hero--menu">
             <div class="hero__copy">
-                <p class="eyebrow">Outdoor Survival Provision Manager</p>
-                <h1>Willkommen im Survival-Verwaltungsmenü.</h1>
+                <p class="eyebrow">Adventureplaner</p>
+                <h1>Ein gemeinsames Projekt fuer Planung, Wissen und Proviant.</h1>
                 <p class="intro">
-                    Wähle zuerst einen Bereich aus. Von hier aus gelangst du zur
-                    Proviantverwaltung und den integrierten Berechnungen.
+                    Die Inhalte aus `app` und `app2` sind jetzt in einer Anwendung gebuendelt.
+                    Das Design bleibt am bestehenden `app`-Look orientiert und fuehrt dich
+                    zentral in alle Bereiche.
                 </p>
             </div>
 
-            <div class="hero__stats">
-                <div class="stat-card">
-                    <span class="stat-label">Modul</span>
+            <div class="hero__stats hero__stats--menu">
+                <a class="stat-card stat-card--link" href="/proviant">
+                    <span class="stat-label">Modul 01</span>
                     <strong>Proviant</strong>
-                    <p class="card-copy">Verwalte Lagerbestand, Verbrauch und Berechnungen in einer Oberfläche.</p>
-                    <a class="button menu-button" href="/proviant">Zum Proviant-Bereich</a>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-label">API Direkt</span>
-                    <strong>REST-Endpunkte</strong>
-                    <p class="card-copy">Für Integrationen stehen alle JSON-Endpunkte weiterhin separat bereit.</p>
-                    <a class="button button--secondary menu-button" href="/provisions">Direkt zur API-Liste</a>
-                </div>
+                    <p class="card-copy">Bestand verwalten, Verbrauch buchen und Berechnungen ausfuehren.</p>
+                </a>
+                <a class="stat-card stat-card--link" href="/lernen">
+                    <span class="stat-label">Modul 02</span>
+                    <strong>Lernphase</strong>
+                    <p class="card-copy">Outdoor-Grundlagen in kompakten Lektionen durchgehen.</p>
+                </a>
+                <a class="stat-card stat-card--link" href="/quiz/start">
+                    <span class="stat-label">Modul 03</span>
+                    <strong>Quiz</strong>
+                    <p class="card-copy">Wissen testen und direkt Feedback zu den Antworten bekommen.</p>
+                </a>
+                <a class="stat-card stat-card--link" href="/charakter">
+                    <span class="stat-label">Modul 04</span>
+                    <strong>Charakter</strong>
+                    <p class="card-copy">Einen Wandercharakter aus den vorhandenen Assets zusammenstellen.</p>
+                </a>
             </div>
         </section>
     </main>

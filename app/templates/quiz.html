@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Design.css') }}">
+</head>
+<body>
+    <main class="layout">
+        <section class="hero hero--compact">
+            <div class="hero__copy">
+                <p class="eyebrow">Quiz</p>
+                <h1>Frage {{ question_index }} von {{ total }}</h1>
+                <p class="intro">Teste dein Wissen aus der Lernphase in einem kompakten Durchlauf.</p>
+            </div>
+            <div class="hero__stats">
+                <div class="stat-card">
+                    <span class="stat-label">Fortschritt</span>
+                    <strong>{{ ((question_index / total) * 100) | int }}%</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel panel--wide">
+            <div class="progress-track">
+                <div class="progress-fill-bar" style="width: {{ ((question_index / total) * 100) | int }}%"></div>
+            </div>
+            <h2 class="quiz-question">{{ question.question }}</h2>
+            <form method="POST" action="/quiz/question/{{ question_index }}" class="quiz-form">
+                {% for option in question.options %}
+                <label class="quiz-option">
+                    <input type="radio" name="answer" value="{{ option }}" required>
+                    <span>{{ option }}</span>
+                </label>
+                {% endfor %}
+                <button type="submit" class="button">
+                    {% if question_index == total %}Quiz auswerten{% else %}Weiter{% endif %}
+                </button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

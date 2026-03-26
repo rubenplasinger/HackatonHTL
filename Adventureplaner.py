@@ -3,12 +3,16 @@ from pathlib import Path
 from flask import Flask, jsonify, render_template
 
 from models import db
+from routes.character import character_bp
 from routes.calculator import calculator_bp
+from routes.learning import learning_bp
 from routes.provisions import provisions_bp
+from routes.quiz import quiz_bp
 
 
 def create_app() -> Flask:
     app = Flask(__name__, template_folder="app/templates", static_folder="app/static")
+    app.secret_key = "adventureplaner-dev-key"
 
     database_path = Path(app.root_path) / "survival_provisions.db"
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{database_path}"
@@ -18,6 +22,9 @@ def create_app() -> Flask:
 
     app.register_blueprint(provisions_bp)
     app.register_blueprint(calculator_bp)
+    app.register_blueprint(learning_bp)
+    app.register_blueprint(quiz_bp)
+    app.register_blueprint(character_bp)
 
     @app.get("/")
     def index():

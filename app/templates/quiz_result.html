@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Ergebnis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Design.css') }}">
+</head>
+<body>
+    <main class="layout">
+        <section class="hero hero--compact">
+            <div class="hero__copy">
+                <p class="eyebrow">Quiz Ergebnis</p>
+                <h1>{{ score_percent }}% erreicht</h1>
+                <p class="intro">{{ score_label }}. {{ correct }} von {{ total }} Antworten waren richtig.</p>
+                <div class="actions">
+                    <a class="button" href="/quiz/start">Quiz erneut starten</a>
+                    <a class="button button--secondary" href="/">Zum Menue</a>
+                </div>
+            </div>
+            <div class="hero__stats">
+                <div class="stat-card stat-card--{{ score_tone }}">
+                    <span class="stat-label">Einschaetzung</span>
+                    <strong>{{ score_label }}</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard">
+            {% for result in results %}
+            <section class="panel">
+                <h2>{{ "Richtig" if result.is_correct else "Verbesserung" }}</h2>
+                <p class="result-question-text">{{ result.question }}</p>
+                <p><strong>Deine Antwort:</strong> {{ result.user_answer if result.user_answer else "Keine Antwort" }}</p>
+                {% if not result.is_correct %}
+                <p><strong>Richtige Antwort:</strong> {{ result.correct_answer }}</p>
+                <p class="result-explanation">{{ result.explanation }}</p>
+                {% endif %}
+            </section>
+            {% endfor %}
+        </section>
+    </main>
+</body>
+</html>

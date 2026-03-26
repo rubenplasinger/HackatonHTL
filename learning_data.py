@@ -1,0 +1,67 @@
+LESSONS = [
+    {
+        "id": 1,
+        "title": "Vorbereitung ist alles",
+        "icon": "Karte",
+        "content": [
+            "Plane deine Route vor dem Start und lade sie offline herunter.",
+            "Pruefe das Wetter mindestens drei Tage im Voraus und erneut am Starttag.",
+            "Teile einer Vertrauensperson deine Route und geplante Rueckkehr mit.",
+            "Plane immer Reservezeit fuer Pausen, Wetterumschwuenge und Orientierung ein.",
+            "Nutze eine Checkliste, damit keine sicherheitsrelevante Ausruestung fehlt.",
+        ],
+        "tip": "Profi-Tipp: Mit einer festen Vorabend-Checkliste vermeidest du die meisten Startfehler.",
+    },
+    {
+        "id": 2,
+        "title": "Das Drei-Schichten-System",
+        "icon": "Kleidung",
+        "content": [
+            "Schicht 1 transportiert Schweiss vom Koerper weg.",
+            "Schicht 2 speichert Waerme und isoliert bei Wind.",
+            "Schicht 3 schuetzt vor Regen, Wind und Kaelte.",
+            "Im Gebirge kann sich die Temperatur sehr schnell aendern.",
+            "Wechsle Kleidung fruehzeitig, bevor du komplett durchgeschwitzt bist.",
+        ],
+        "tip": "Profi-Tipp: Packe selbst im Sommer eine extra Waermeschicht ein.",
+    },
+    {
+        "id": 3,
+        "title": "Navigation und Orientierung",
+        "icon": "Kompass",
+        "content": [
+            "Lerne topografische Karten und Hoehenlinien zu lesen.",
+            "Ein Kompass funktioniert auch ohne Akku und Netz.",
+            "Speichere GPS-Routen immer offline auf dem Geraet.",
+            "Merke dir markante Orientierungspunkte entlang der Tour.",
+            "Bei Nebel musst du Tempo reduzieren und exakter navigieren.",
+        ],
+        "tip": "Profi-Tipp: Uebe Navigation einmal ohne App, bevor du dich darauf verlassen musst.",
+    },
+    {
+        "id": 4,
+        "title": "Wasser und Energie",
+        "icon": "Wasser",
+        "content": [
+            "Trinke regelmaessig und nicht erst bei starkem Durst.",
+            "Plane Wasserreserven fuer Hitze und lange Etappen ein.",
+            "Nimm energiereiche Snacks fuer unterwegs mit.",
+            "Elektrolyte koennen bei langen Touren sinnvoll sein.",
+            "Berechne den Bedarf lieber grosszuegig als zu knapp.",
+        ],
+        "tip": "Profi-Tipp: Rechne deine Wasser- und Kalorienmenge vor dem Start durch.",
+    },
+    {
+        "id": 5,
+        "title": "Notfall und Erste Hilfe",
+        "icon": "Hilfe",
+        "content": [
+            "Eine kleine Erste-Hilfe-Ausstattung gehoert auf jede Tour.",
+            "Blasen, Verstauchungen und kleinere Wunden solltest du direkt versorgen.",
+            "Speichere Notrufnummern und kenne den europaweiten Notruf 112.",
+            "Bei ernsten Symptomen ist fruehes Handeln wichtiger als Durchhalten.",
+            "Sicherheit geht immer vor Gipfelziel oder Zeitplan.",
+        ],
+        "tip": "Profi-Tipp: Ein Outdoor-Erste-Hilfe-Kurs macht im Ernstfall einen grossen Unterschied.",
+    },
+]
