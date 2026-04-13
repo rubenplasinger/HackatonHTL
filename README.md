@@ -30,4 +30,3 @@ Danach im Browser:
 
 - Der Tourenplaner nutzt `Open-Meteo` fuer Wetterdaten.
 - Die Routenberechnung laeuft ueber den freien OSRM-Dienst.
-- Krankenhaus-Endpunkte aus `app3` wurden bewusst nicht uebernommen.
