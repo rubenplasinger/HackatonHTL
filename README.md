@@ -6,7 +6,7 @@ Zusammengefuehrtes Flask-Projekt mit:
 - Lernphase
 - Quiz
 - Charakter-Editor
-- Tourenplaner aus `app3` ohne Krankenhaus-Funktionen
+- Tourenplaner
 
 ## Start
 
