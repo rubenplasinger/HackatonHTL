@@ -1,6 +1,6 @@
 # Adventureplaner
 
-Zusammengefuehrtes Flask-Projekt mit:
+Flask-Projekt mit:
 
 - Proviantverwaltung und Rechnern
 - Lernphase
@@ -19,7 +19,7 @@ python Adventureplaner.py
 
 Danach im Browser:
 
-- `http://127.0.0.1:5000/` fuer das Hauptmenue
+- `http://127.0.0.1:5000/` für das Hauptmenü
 - `http://127.0.0.1:5000/proviant`
 - `http://127.0.0.1:5000/lernen`
 - `http://127.0.0.1:5000/quiz/start`
@@ -28,5 +28,5 @@ Danach im Browser:
 
 ## Hinweise
 
-- Der Tourenplaner nutzt `Open-Meteo` fuer Wetterdaten.
-- Die Routenberechnung laeuft ueber den freien OSRM-Dienst.
+- Der Tourenplaner nutzt `Open-Meteo` für Wetterdaten.
+- Die Routenberechnung läuft über den freien OSRM-Dienst.
